@@ -1,5 +1,6 @@
 ## CHALLENGE 1
 ## 		1.1 Determine the shortest and longest movie durations and name the values as max_duration and min_duration.
+USE sakila;
 
 SELECT max(length) as max_duration, min(length) as min_duration FROM film; ##option 1
 
@@ -52,3 +53,45 @@ FROM film;
 ## Please note that even if there are currently no null values in the rental duration column, the query should still be written to handle such cases in the future.
 ## Hint: Look for the IFNULL() function.
 ## 
+
+##CHALLENGE 2
+## Next, you need to analyze the films in the collection to gain some more insights. Using the film table, determine:
+## 1.1 The total number of films that have been released.
+
+SELECT COUNT(*) as total_films
+FROM film
+GROUP BY release_year;
+
+## 1.2 The number of films for each rating.
+
+SELECT rating, COUNT(*) as total_films
+FROM film
+GROUP BY rating;
+
+## 1.3 The number of films for each rating, sorting the results in descending order of the number of films. This will help you to better understand the popularity of different film ratings and adjust purchasing decisions accordingly.
+
+SELECT rating, COUNT(*) as total_films
+FROM film
+GROUP BY rating
+ORDER BY total_films DESC;
+
+## Using the film table, determine:
+## 2.1 The mean film duration for each rating, and sort the results in descending order of the mean duration. Round off the average lengths to two decimal places. This will help identify popular movie lengths for each category.
+
+SELECT rating, ROUND(AVG(length),2) as avg_duration
+FROM film
+GROUP BY rating
+ORDER BY rating DESC;
+
+## 2.2 Identify which ratings have a mean duration of over two hours in order to help select films for customers who prefer longer movies.
+
+SELECT rating, ROUND(AVG(length),2) as avg_duration
+FROM film
+GROUP BY rating
+HAVING AVG(length) / 60 > 2
+ORDER BY rating DESC;
+
+## Bonus: determine which last names are not repeated in the table actor.
+
+SELECT DISTINCT last_name as non_repeated_last_names
+FROM actor;
